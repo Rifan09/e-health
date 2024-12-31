@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= medicine ? 'Edit Obat' : 'Tambah Obat Baru' %></title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto bg-white p-8 rounded shadow-md">
+        <h1 class="text-2xl font-bold mb-6">
+            <%= medicine ? 'Edit Obat' : 'Tambah Obat Baru' %>
+        </h1>
+
+        <% if (locals.error) { %>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <form 
+                action="/medicines/<%= medicine ? medicine._id + '?_method=PUT' : 'add' %>" 
+                method="POST"
+                class="space-y-4"
+            >
+            <!-- ID Obat -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">ID Obat</label>
+                <input 
+                    type="text" 
+                    name="ID_Obat" 
+                    value="<%= medicine ? medicine.ID_Obat : '' %>"
+                    required
+                    class="w-full px-3 py-2 border rounded-md"
+                    placeholder="Masukkan ID Obat"
+                >
+            </div>
+
+            <!-- Nama Obat -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Nama Obat</label>
+                <input 
+                    type="text" 
+                    name="Nama_Obat" 
+                    value="<%= medicine ? medicine.Nama_Obat : '' %>"
+                    required
+                    class="w-full px-3 py-2 border rounded-md"
+                    placeholder="Masukkan Nama Obat"
+                >
+            </div>
+
+            <!-- Kategori -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Kategori</label>
+                <select 
+                    name="Kategori" 
+                    required
+                    class="w-full px-3 py-2 border rounded-md"
+                >
+                    <option value="">Pilih Kategori</option>
+                    <option <%= medicine && medicine.Kategori === 'Analgesik-Antipiretik' ? 'selected' : '' %> value="Analgesik-Antipiretik">Analgesik-Antipiretik</option>
+                    <option <%= medicine && medicine.Kategori === 'Antibiotik' ? 'selected' : '' %> value="Antibiotik">Antibiotik</option>
+                    <option <%= medicine && medicine.Kategori === 'Antasida' ? 'selected' : '' %> value="Antasida">Antasida</option>
+                    <option <%= medicine && medicine.Kategori === 'Vitamin' ? 'selected' : '' %> value="Vitamin">Vitamin</option>
+                    <option <%= medicine && medicine.Kategori === 'Flu dan Batuk' ? 'selected' : '' %> value="Flu dan Batuk">Flu dan Batuk</option>
+                </select>
+            </div>
+
+            <!-- Indikasi -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Indikasi (pisahkan dengan koma)</label>
+                <input 
+                    type="text" 
+                    name="Indikasi" 
+                    value="<%= medicine && medicine.Indikasi ? medicine.Indikasi.join(', ') : '' %>"
+                    class="w-full px-3 py-2 border rounded-md"
+                    placeholder="Contoh: Demam, Nyeri ringan"
+                >
+            </div>
+
+            <!-- Kontraindikasi -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Kontraindikasi (pisahkan dengan koma)</label>
+                <input 
+                    type="text" 
+                    name="Kontraindikasi" 
+                    value="<%= medicine && medicine.Kontraindikasi ? medicine.Kontraindikasi.join(', ') : '' %>"
+                    class="w-full px-3 py-2 border rounded-md"
+                    placeholder="Contoh: Hipertensi, Gangguan hati"
+                >
+            </div>
+
+            <!-- Dosis Dewasa -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Dosis Dewasa</label>
+                <input 
+                    type="text" 
+                    name="Dosis_Dewasa" 
+                    value="<%= medicine ? medicine.Dosis_Dewasa : '' %>"
+                    required
+                    class="w-full px-3 py-2 border rounded-md"
+                    placeholder="Contoh: 500mg, 3x sehari"
+                >
+            </div>
+
+            <!-- Dosis Anak -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Dosis Anak</label>
+                <input 
+                    type="text" 
+                    name="Dosis_Anak" 
+                    value="<%= medicine ? medicine.Dosis_Anak : '' %>"
+                    required
+                    class="w-full px-3 py-2 border rounded-md"
+                    placeholder="Contoh: 250mg, 2x sehari"
+                >
+            </div>
+
+            <!-- Bentuk Sediaan -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Bentuk Sediaan</label>
+                <select 
+                    name="Bentuk_Sediaan" 
+                    required
+                    class="w-full px-3 py-2 border rounded-md"
+                >
+                    <option value="">Pilih Bentuk Sediaan</option>
+                    <option <%= medicine && medicine.Bentuk_Sediaan === 'Tablet' ? 'selected' : '' %> value="Tablet">Tablet</option>
+                    <option <%= medicine && medicine.Bentuk_Sediaan === 'Kapsul' ? 'selected' : '' %> value="Kapsul">Kapsul</option>
+                    <option <%= medicine && medicine.Bentuk_Sediaan === 'Sirup' ? 'selected' : '' %> value="Sirup">Sirup</option>
+                    <option <%= medicine && medicine.Bentuk_Sediaan === 'Suspensi' ? 'selected' : '' %> value="Suspensi">Suspensi</option>
+                </select>
+            </div>
+
+            <!-- Kandungan -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Kandungan</label>
+                <input 
+                    type="text" 
+                    name="Kandungan" 
+                    value="<%= medicine ? medicine.Kandungan : '' %>"
+                    required
+                    class="w-full px-3 py-2 border rounded-md"
+                    placeholder="Contoh: Paracetamol 500mg"
+                >
+            </div>
+
+            <!-- Efek Samping -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Efek Samping (pisahkan dengan koma)</label>
+                <input 
+                    type="text" 
+                    name="Efek_Samping" 
+                    value="<%= medicine && medicine.Efek_Samping ? medicine.Efek_Samping.join(', ') : '' %>"
+                    class="w-full px-3 py-2 border rounded-md"
+                    placeholder="Contoh: Mual, Pusing"
+                >
+            </div>
+
+            <!-- Interaksi -->
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Interaksi (pisahkan dengan koma)</label>
+                <input 
+                    type="text" 
+                    name="Interaksi" 
+                    value="<%= medicine && medicine.Interaksi ? medicine.Interaksi.join(', ') : '' %>"
+                    class="w-full px-3 py-2 border rounded-md"
+                    placeholder="Contoh: Warfarin, Antihipertensi"
+                >
+                        <!-- Peringatan -->
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">Peringatan (pisahkan dengan koma)</label>
+                            <input 
+                                type="text" 
+                                name="Peringatan" 
+                                value="<%= medicine && medicine.Peringatan ? medicine.Peringatan.join(', ') : '' %>"
+                                class="w-full px-3 py-2 border rounded-md"
+                                placeholder="Contoh: Hindari mengemudi, Konsultasi dokter"
+                            >
+                        </div>
+            
+                        <!-- Harga -->
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">Harga (Rp)</label>
+                            <input 
+                                type="number" 
+                                name="Harga" 
+                                value="<%= medicine ? medicine.Harga : '' %>"
+                                required
+                                min="0"
+                                class="w-full px-3 py-2 border rounded-md"
+                                placeholder="Masukkan harga obat"
+                            >
+                        </div>
+            
+                        <!-- Ketersediaan -->
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">Ketersediaan</label>
+                            <select 
+                                name="Ketersediaan" 
+                                required
+                                class="w-full px-3 py-2 border rounded-md"
+                            >
+                                <option value="">Pilih Ketersediaan</option>
+                                <option 
+                                    <%= medicine && medicine.Ketersediaan === true ? 'selected' : '' %> 
+                                    value="true"
+                                >
+                                    Tersedia
+                                </option>
+                                <option 
+                                    <%= medicine && medicine.Ketersediaan === false ? 'selected' : '' %> 
+                                    value="false"
+                                >
+                                    Tidak Tersedia
+                                </option>
+                            </select>
+                        </div>
+            
+                        <!-- Produsen -->
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">Produsen</label>
+                            <input 
+                                type="text" 
+                                name="Produsen" 
+                                value="<%= medicine ? medicine.Produsen : '' %>"
+                                required
+                                class="w-full px-3 py-2 border rounded-md"
+                                placeholder="Nama produsen obat"
+                            >
+                        </div>
+            
+                        <!-- No BPOM -->
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">Nomor BPOM</label>
+                            <input 
+                                type="text" 
+                                name="No_BPOM" 
+                                value="<%= medicine ? medicine.No_BPOM : '' %>"
+                                required
+                                class="w-full px-3 py-2 border rounded-md"
+                                placeholder="Nomor BPOM obat"
+                            >
+                        </div>
+            
+                        <!-- Golongan -->
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">Golongan Obat</label>
+                            <select 
+                                name="Golongan" 
+                                required
+                                class="w-full px-3 py-2 border rounded-md"
+                            >
+                                <option value="">Pilih Golongan Obat</option>
+                                <option 
+                                    <%= medicine && medicine.Golongan === 'Bebas' ? 'selected' : '' %> 
+                                    value="Bebas"
+                                >
+                                    Bebas
+                                </option>
+                                <option 
+                                    <%= medicine && medicine.Golongan === 'Bebas Terbatas' ? 'selected' : '' %> 
+                                    value="Bebas Terbatas"
+                                >
+                                    Bebas Terbatas
+                                </option>
+                                <option 
+                                    <%= medicine && medicine.Golongan === 'Keras' ? 'selected' : '' %> 
+                                    value="Keras"
+                                >
+                                    Keras
+                                </option>
+                            </select>
+                        </div>
+            
+                        <!-- Rating -->
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">Rating</label>
+                            <select 
+                                name="Rating" 
+                                required
+                                class="w-full px-3 py-2 border rounded-md"
+                            >
+                                <option value="">Pilih Rating</option>
+                                <% for(let i = 1; i <= 5; i++) { %>
+                                    <option 
+                                        <%= medicine && medicine.Rating === i ? 'selected' : '' %> 
+                                        value="<%= i %>"
+                                    >
+                                        <%= i %>
+                                    </option>
+                                <% } %>
+                            </select>
+                        </div>
+            
+                        <!-- Tombol Submit -->
+                        <div class="flex justify-between items-center">
+
+                            <button 
+                                type="submit" 
+                                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition mb-4"
+                            >
+                                <%= medicine ? 'Update Obat' : 'Tambah Obat' %>
+                            </button>
+                            
+                            <a 
+                                href="/medicines" 
+                                class="text-gray-600 hover:underline"
+                            >
+                                Kembali ke Daftar Obat
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </body>
+            </html>
